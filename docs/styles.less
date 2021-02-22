@@ -1,4 +1,5 @@
 * {
+  font-family: Roboto;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -12,21 +13,222 @@ html,body {
 }
 
 body {
-  background: #2e2a23;
-  background-repeat: no-repeat;
   position: relative;
 }
 
 #map {
+  grid-area: map;
   width: 100%;
   height: 100%;
+  min-height: 400px;
 }
 
-.plane-marker {
-  background-image: url('mapbox-icon.png');
-  background-size: cover;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: pointer;
+#flight-info {
+  grid-area: finfo;
+  min-height: 300px;
+
+  .flight-info__no-flight {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0px 20px;
+    color: #8d8d8d;
+    text-align: center;
+  }
+
+  .flight-info__info {
+    display: none;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .flight-info-table {
+    width: 100%;
+    height: 0%;
+    min-height: 400px;
+    padding-left: 10px;
+
+    tr {
+      .left-column {
+        width: 40%;
+        font-size: 13px;
+        color: #8a8a8a;
+        vertical-align: middle;
+      }
+  
+      .right-column {
+        width: 60%;
+        max-width: 130px;
+        font-size: 15px;
+        color: #ffffff;
+        vertical-align: middle;
+        white-space: nowrap;
+        -ms-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+#total-info {
+  grid-area: total;
+  min-height: 130px;
+}
+
+#flights {
+  grid-area: flights;
+  min-height: 300px;
+
+  .flights__no-flights {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0px 20px;
+    color: #8d8d8d;
+    text-align: center;
+  }
+}
+
+.page {
+  width: 100%;
+  height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: #737373;
+
+  &:hover {
+    color: #8d8d8d;
+  }
+}
+
+.header, .main, .footer {
+  width: 100%;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  padding: 0 20px;
+  background-color: #333;
+}
+
+.footer .wrapper {
+  height: 40px;;
+}
+
+.header {
+  .header-title {
+    color: white;
+    font-size: 35px;
+
+    .powered-by {
+      color: #6b6b6b;
+      font-size: 13px;
+    }
+  }
+
+  .header-loading-indicator {
+    color: #6b6b6b;
+    line-height: 45px;
+    vertical-align: middle;
+    opacity: 0;
+    animation: opacity 1s ease-in;
+    transition: opacity .5s;
+
+    .loader {
+      display: inline-block;
+      border: 4px solid transparent;
+      border-top: 4px solid #6b6b6b;
+      border-radius: 30px;
+      width: 30px;
+      height: 30px;
+      -webkit-animation: spin 1s linear infinite;
+      animation: spin 1s linear infinite;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+  }
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  height: calc(100vh - 70px - 40px);
+  width: 100%;
+  background: #232729;
+  overflow-y: auto;
+
+  .main-wrapper {
+    position: relative;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: 1.2fr repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-areas: "finfo map map map flights" "finfo map map map flights" "finfo map map map flights" "finfo total total c flights";
+    gap: 20px;
+
+    & > * {
+      border-radius: 10px;
+    }
+
+    .grid-item {
+      background-color: #333;
+      border: 1px solid #565656;
+
+      .grid-item-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50px;
+        border-bottom: 1px solid #565656;
+        color: white;
+        font-size: 20px;
+      }
+
+      .grid-item-body {
+        height: calc(100% - 50px);
+        color: white;
+      }
+    }
+  }
+}
+
+.footer {
+  .footer-dev {
+    display: flex;
+
+    span {
+      margin-right: 5px;
+      color: #6b6b6b;
+    }
+  }
+}
+
+@media(max-width: 1000px) {
+  .main-wrapper {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: none !important;
+    grid-template-areas: "map" "finfo" "total" "flights" "c" !important;
+    gap: 20px;
+  }
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

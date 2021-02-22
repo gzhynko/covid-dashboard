@@ -1,5 +1,6 @@
 import Coordinate from './Coordinate';
 import { PositionSource } from './PositionSource';
+import KeyValuePair from './KeyValuePair';
 
 export default class State {
   public Icao24: string;
@@ -54,6 +55,46 @@ export default class State {
     this.Squawk = squawk
     this.SpecialPurposeIndicator = specialPurposeIndicator
     this.PositionSource = positionSource
+  }
+
+  public ToKeyValueArrayForTable(): Array<KeyValuePair<string, string>>{
+    const unknownString = "unknown";
+
+    let result: Array<KeyValuePair<string, string>> = [ 
+      new KeyValuePair<string, string>("Callsign", this.Callsign ?? unknownString) ,
+      new KeyValuePair<string, string>("Origin country", this.OriginCountry),
+      new KeyValuePair<string, string>("Mode S Code", this.Icao24),
+      new KeyValuePair<string, string>("Barom. Altitude", (this.BaroAltitude ?? unknownString).toString()),
+      new KeyValuePair<string, string>("Geom. Altitude", (this.GeoAltitude ?? unknownString).toString()),
+      new KeyValuePair<string, string>("Ground velocity", (this.GroundSpeed ?? unknownString).toString()),
+      new KeyValuePair<string, string>("On ground", this.OnGround ? "Yes" : "No"),
+      new KeyValuePair<string, string>("True track", (this.TrueTrack ?? unknownString).toString()),
+      new KeyValuePair<string, string>("Vertical rate", (this.VerticalSpeed ?? unknownString).toString()),
+      new KeyValuePair<string, string>("Squawk", (this.Squawk ?? unknownString).toString()),
+      new KeyValuePair<string, string>("Special purpose", this.SpecialPurposeIndicator ? "Yes" : "No"),
+      new KeyValuePair<string, string>("Position source", this.getPositionSourceString()) ];
+
+    return result;
+  }
+
+  private getPositionSourceString(): string {
+    let result = '';
+
+    switch(this.PositionSource) {
+      case PositionSource.ADSB:
+        result = 'ADS-B';
+        break;
+        
+      case PositionSource.ASTERIX:
+        result = 'ASTERIX';
+        break;
+
+      case PositionSource.MLAT:
+        result = 'MLAT';
+        break;
+    }
+
+    return result;
   }
 }
 

@@ -29,6 +29,9 @@ export default class MapManager {
         style: 'mapbox://styles/mapbox/outdoors-v11'
       });
 
+      this.GetMap().dragRotate.disable();
+      this.GetMap().touchZoomRotate.disableRotation();
+
       this.GetMap().on('load', () => {
         this.GetMap().loadImage("./images/plane_marker.png", (error, image) => {
           if(image === undefined) return;
@@ -61,10 +64,6 @@ export default class MapManager {
         resolve();
       });
     });
-  }
-
-  public PlaceInitialPlaneMarkers(flightStates: Array<State>): void {
-    this.placeMarkers(flightStates);
   }
 
   public UpdateMarkers(flightStates: Array<State>): void {
@@ -112,8 +111,6 @@ export default class MapManager {
       featureCollection.push(feature);
     }
 
-    
-    console.log(this.GetMap().getSource(this.markersSource));
     (this.GetMap().getSource(this.markersSource) as any).setData({
       type: "FeatureCollection",
       features: featureCollection
@@ -129,7 +126,7 @@ export default class MapManager {
       this.GetMap().getCanvas().style.cursor = '';
     });
 
-    this.GetMap().on('mousedown', this.markersLayer, (e) => {
+    this.GetMap().on('click', this.markersLayer, (e) => {
       this.lastClickedMouseX = e.point.x;
       this.lastClickedMouseY = e.point.y;
 
@@ -138,7 +135,7 @@ export default class MapManager {
       this.trackerManager.FlightClicked(e.features[0].properties.id);
     });
 
-    this.GetMap().on('mousedown', (e) => {
+    this.GetMap().on('click', (e) => {
       if(this.lastClickedMouseX == e.point.x && this.lastClickedMouseY == e.point.y) return;
 
       this.trackerManager.DeselectCurrentFlight();

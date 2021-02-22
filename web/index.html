@@ -4,12 +4,63 @@
     <title>Flight Tracker</title>
     
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+    <link href="http://fonts.cdnfonts.com/css/roboto" rel="stylesheet">
 
     <link rel="stylesheet" href="./styles.css" type="text/css" media="screen" title="no title" charset="utf-8">
   </head>
 
   <body>
-    <div id="map"></div>
+    <div class="page">
+      <header class="header">
+        <div class="wrapper">
+          <div class="header-title">
+            Flight Tracker <span class="powered-by">powered by the <a href="https://opensky-network.org/">OpenSky Network</a></span>
+          </div>
+          <div class="header-loading-indicator">
+            Fetching data.. <div class="loader"></div>
+          </div>
+        </div>
+      </header>
+      <div class="main">
+        <div class="main-wrapper">
+          <div id="total-info" class="grid-item"></div>
+          <div id="flights" class="grid-item">
+            <div class="grid-item-header">Flights</div>
+            <div class="grid-item-body">
+              <div class="flights__no-flights">
+                No flights displayed.
+              </div>
+              <div class="flights__flights">
+
+              </div>
+            </div>
+          </div>
+          <div id="flight-info" class="grid-item">
+            <div class="grid-item-header">Flight Info</div>
+            <div class="grid-item-body">
+              <div class="flight-info__no-flight">
+                Click an aircraft on the map to see its info.
+              </div>
+              <div class="flight-info__info">
+                <table class="flight-info-table"></table>
+              </div>
+            </div>
+          </div>
+          <div id="map"></div>
+        </div>
+      </div>
+      <footer class="footer">
+        <div class="wrapper">
+          <a class="footer-rs-school" href="https://rs.school/js/">
+            <svg class="footer-rs-school-icon"><use xlink:href="#icon-rsschool"></use></svg>
+            <span>2021</span>
+          </a>
+          <div class="footer-dev">
+            <span>by</span> <a class="footer-github-link" href="https://github.com/gzhynko">gzhynko</a>
+          </div>
+        </div>
+      </footer>
+    </div>  
 
     <script src="main-bundle.js"></script>
   </body>
