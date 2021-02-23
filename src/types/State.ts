@@ -7,7 +7,7 @@ export default class State {
   public Callsign: string | null;
   public OriginCountry: string;
   public TimePosition: number;
-  public LastContact: number;
+  public LastContact: number | null;
   public Coordinate: Coordinate | null;
   public BaroAltitude: number | null;
   public OnGround: boolean;
@@ -26,7 +26,7 @@ export default class State {
     callsign: string | null, 
     originCountry: string, 
     timePosition: number, 
-    lastContact: number, 
+    lastContact: number | null, 
     coordinate: Coordinate | null, 
     baroAltitude: number | null, 
     onGround: boolean, 
@@ -58,18 +58,18 @@ export default class State {
   }
 
   public ToKeyValueArrayForTable(): Array<KeyValuePair<string, string>>{
-    const unknownString = "unknown";
+    const unknownString = "N/A";
 
-    let result: Array<KeyValuePair<string, string>> = [ 
-      new KeyValuePair<string, string>("Callsign", this.Callsign ?? unknownString) ,
+    const result: Array<KeyValuePair<string, string>> = [ 
+      new KeyValuePair<string, string>("Callsign", this.Callsign ?? unknownString),
       new KeyValuePair<string, string>("Origin country", this.OriginCountry),
       new KeyValuePair<string, string>("Mode S Code", this.Icao24),
-      new KeyValuePair<string, string>("Barom. Altitude", (this.BaroAltitude ?? unknownString).toString()),
-      new KeyValuePair<string, string>("Geom. Altitude", (this.GeoAltitude ?? unknownString).toString()),
-      new KeyValuePair<string, string>("Ground velocity", (this.GroundSpeed ?? unknownString).toString()),
+      new KeyValuePair<string, string>("Barom. Altitude", ((this.BaroAltitude ?? unknownString) + ' ft').toString()),
+      new KeyValuePair<string, string>("Geom. Altitude", ((this.GeoAltitude ?? unknownString) + ' ft').toString()),
+      new KeyValuePair<string, string>("Ground velocity", ((this.GroundSpeed ?? unknownString) + ' kts').toString()),
       new KeyValuePair<string, string>("On ground", this.OnGround ? "Yes" : "No"),
-      new KeyValuePair<string, string>("True track", (this.TrueTrack ?? unknownString).toString()),
-      new KeyValuePair<string, string>("Vertical rate", (this.VerticalSpeed ?? unknownString).toString()),
+      new KeyValuePair<string, string>("True track", ((this.TrueTrack ?? unknownString) + '°').toString()),
+      new KeyValuePair<string, string>("Vertical rate", ((this.VerticalSpeed ?? unknownString) + ' fpm').toString()),
       new KeyValuePair<string, string>("Squawk", (this.Squawk ?? unknownString).toString()),
       new KeyValuePair<string, string>("Special purpose", this.SpecialPurposeIndicator ? "Yes" : "No"),
       new KeyValuePair<string, string>("Position source", this.getPositionSourceString()) ];
@@ -103,7 +103,7 @@ export class JsonState {
   public callsign: string | null;
   public origin_country: string;
   public time_position: number;
-  public last_contact: number;
+  public last_contact: number | null;
   public longitude: number | null;
   public latitude: number | null;
   public baro_altitude: number | null;
@@ -123,7 +123,7 @@ export class JsonState {
     callsign: string | null, 
     originCountry: string, 
     timePosition: number, 
-    lastContact: number, 
+    lastContact: number | null, 
     longitude: number | null,
     latitude: number | null ,
     baroAltitude: number | null, 

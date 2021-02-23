@@ -23,7 +23,24 @@
       </header>
       <div class="main">
         <div class="main-wrapper">
-          <div id="total-info" class="grid-item"></div>
+          <div id="total-info" class="grid-item">
+            <div class="total-flights total-info__block">
+              <span class="block-name">Total Flights (displ.)</span>
+              <span class="block-value">0 (0)</span>
+            </div>
+            <div class="last-update total-info__block">
+              <span class="block-name">Last Update</span>
+              <span class="block-value">N/As</span>
+            </div>
+            <div class="last-pos-update total-info__block">
+              <span class="block-name">Last Position Update</span>
+              <span class="block-value">N/As</span>
+            </div>
+            <button class="resize resize--expand">
+              <span class="resize-text__expand">E</span>
+              <span class="resize-text__collapse">C</span>
+            </button>
+          </div>
           <div id="flights" class="grid-item">
             <div class="grid-item-header">Flights</div>
             <div class="grid-item-body">
@@ -31,9 +48,19 @@
                 No flights displayed.
               </div>
               <div class="flights__flights">
-
+                <input class="flights-search" type="text" placeholder="Search flights...">
+                <div class="flights-display">
+                  <div class="flight-item">
+                    <img class="flight-item-country" src="https://www.countryflags.io/by/flat/32.png">
+                    <span class="flight-item-callsign">EJU7942</span>
+                  </div>
+                </div>
               </div>
             </div>
+            <button class="resize resize--expand">
+              <span class="resize-text__expand">E</span>
+              <span class="resize-text__collapse">C</span>
+            </button>
           </div>
           <div id="flight-info" class="grid-item">
             <div class="grid-item-header">Flight Info</div>
@@ -45,22 +72,31 @@
                 <table class="flight-info-table"></table>
               </div>
             </div>
+            <button class="resize resize--expand">
+              <span class="resize-text__expand">E</span>
+              <span class="resize-text__collapse">C</span>
+            </button>
           </div>
-          <div id="map"></div>
+          <div id="map" class="grid-item">
+            <button class="resize resize--expand">
+              <span class="resize-text__expand">E</span>
+              <span class="resize-text__collapse">C</span>
+            </button>
+          </div>
         </div>
       </div>
       <footer class="footer">
         <div class="wrapper">
-          <a class="footer-rs-school" href="https://rs.school/js/">
-            <svg class="footer-rs-school-icon"><use xlink:href="#icon-rsschool"></use></svg>
-            <span>2021</span>
+          <a class="rs-school-logo" href="https://rs.school/js/">
+            <img class="inverted-color" src="https://rs.school/images/rs_school_js.svg" width="55" height="20" alt="rs-school">
+            2021
           </a>
           <div class="footer-dev">
             <span>by</span> <a class="footer-github-link" href="https://github.com/gzhynko">gzhynko</a>
           </div>
         </div>
       </footer>
-    </div>  
+    </div>
 
     <script src="main-bundle.js"></script>
   </body>

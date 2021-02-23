@@ -23,8 +23,8 @@
     "webpack-cli": "3.3.12"
   },
   "dependencies": {
-    "@types/request": "^2.48.5",
     "@types/superagent": "^4.1.10",
+    "country-code-lookup": "^0.0.19",
     "mapbox-gl": "^2.1.1",
     "superagent": "^6.1.0"
   }

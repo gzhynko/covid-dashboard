@@ -1,4 +1,4 @@
-import State, { JsonState } from "../types/State";
+import { JsonState } from "../types/State";
 import UrlParameter from '../types/UrlParameter';
 import Constants from '../Constants';
 import UrlUtility from "../utility/UrlUtility";

@@ -1,9 +1,9 @@
 import * as MapBoxGL from 'mapbox-gl';
 import Constants from '../Constants';
-import State from '../types/State';
 import LatLngBounds from '../types/LatLngBounds';
 import Coordinate from '../types/Coordinate';
 import TrackerManager from './TrackerManager';
+import StateArray from '../types/StateArray';
 
 export default class MapManager {
   public Map: MapBoxGL.Map | undefined;
@@ -15,10 +15,13 @@ export default class MapManager {
   private lastClickedMouseX = 0;
   private lastClickedMouseY = 0;
 
+  private flightStates: StateArray;
+
   private trackerManager: TrackerManager;
 
   constructor(trackerManager: TrackerManager) {
     this.trackerManager = trackerManager;
+    this.flightStates = new StateArray();
   }
 
   public InitMap(): Promise<void> {
@@ -59,14 +62,14 @@ export default class MapManager {
           }
         });
 
-        this.setUpMarkerEvents();
+        this.setUpEvents();
         
         resolve();
       });
     });
   }
 
-  public UpdateMarkers(flightStates: Array<State>): void {
+  public UpdateMarkers(flightStates: StateArray): void {
     this.placeMarkers(flightStates);
   }
 
@@ -80,22 +83,32 @@ export default class MapManager {
     return new LatLngBounds(new Coordinate(southWestCoordinate.lat, southWestCoordinate.lng), new Coordinate(northEastCoordinate.lat, northEastCoordinate.lng));
   }
 
-  public GetMarkerByIcao24(icao24: string): any {
-    (this.GetMap().getSource(this.markersSource) as any)._data.features.forEach((feature: any) => {
-      if(feature.properties.icao24 == icao24){
-        return feature;
-      }
-    });
+  public GetMap(): MapBoxGL.Map {
+    return this.Map as MapBoxGL.Map;
   }
 
-  placeMarkers(flightStates: Array<State>): void {
-    let featureCollection = [];
+  public PanToMarker(icao24: string): void {
+    let featurePos: any;
+    
+    (this.GetMap().getSource(this.markersSource) as any)._data.features.forEach((feature: any) => {
+      if(feature.properties.id == icao24){
+        featurePos = feature.geometry.coordinates;
+      }
+    });
+
+    this.GetMap().flyTo({ center: featurePos, zoom: 7, speed: 2 });
+  }
+
+  private placeMarkers(flightStates: StateArray): void {
+    this.flightStates = flightStates;
+
+    const featureCollection = [];
 
     for (let i = 0; i < flightStates.length; i++) {
       const flightState = flightStates[i];
       if(flightState.Coordinate == null || flightState.Coordinate.AnyValueNull()) continue;
       
-      let feature = {
+      const feature = {
         'type': "Feature" as any,
         'properties': {
           'id': flightState.Icao24,
@@ -117,12 +130,12 @@ export default class MapManager {
     });
   }
 
-  setUpMarkerEvents(): void {
-    this.GetMap().on('mouseover', this.markersLayer, (e) => {
+  private setUpEvents(): void {
+    this.GetMap().on('mouseover', this.markersLayer, () => {
       this.GetMap().getCanvas().style.cursor = 'pointer';
     });
 
-    this.GetMap().on('mouseleave', this.markersLayer, (e) => {
+    this.GetMap().on('mouseleave', this.markersLayer, () => {
       this.GetMap().getCanvas().style.cursor = '';
     });
 
@@ -132,7 +145,7 @@ export default class MapManager {
 
       if(e.features === undefined || e.features[0].properties === null) return;
 
-      this.trackerManager.FlightClicked(e.features[0].properties.id);
+      this.trackerManager.FlightClicked(e.features[0].properties.id, this.flightStates.GetByIcao24(e.features[0].properties.id));
     });
 
     this.GetMap().on('click', (e) => {
@@ -140,9 +153,13 @@ export default class MapManager {
 
       this.trackerManager.DeselectCurrentFlight();
     });
-  }
 
-  public GetMap(): MapBoxGL.Map {
-    return this.Map as MapBoxGL.Map;
+    this.GetMap().on('dragend', () => {
+      this.trackerManager.UIManager.UpdateMapBounds(this.flightStates, this.GetMapBounds());
+    });
+
+    this.GetMap().on('zoomend', () => {
+      this.trackerManager.UIManager.UpdateMapBounds(this.flightStates, this.GetMapBounds());
+    });
   }
 }

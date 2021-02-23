@@ -20,6 +20,9 @@ body {
   height: 100%;
   min-height: 400px;
 }
+#map:hover {
+  overflow: initial !important;
+}
 #flight-info {
   grid-area: finfo;
   min-height: 300px;
@@ -62,8 +65,29 @@ body {
   overflow: hidden;
 }
 #total-info {
-  grid-area: total;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   min-height: 130px;
+  padding: 10px;
+  grid-area: total;
+}
+#total-info .total-info__block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90%;
+  width: 50%;
+  color: white;
+}
+#total-info .total-info__block .block-name {
+  font-size: 12px;
+  margin-bottom: 5px;
+  color: #8d8d8d;
+}
+#total-info .total-info__block .block-value {
+  font-size: 20px;
 }
 #flights {
   grid-area: flights;
@@ -77,6 +101,48 @@ body {
   padding: 0px 20px;
   color: #8d8d8d;
   text-align: center;
+}
+#flights .flights__flights {
+  display: none;
+  height: 100%;
+}
+#flights .flights__flights .flights-search {
+  width: 100%;
+  height: 45px;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #505050;
+  background-color: transparent;
+  color: white;
+  font-size: 16px;
+}
+#flights .flights__flights .flights-display {
+  width: 100%;
+  height: calc(100% - 45px);
+  overflow-y: auto;
+}
+#flights .flights__flights .flights-display .flight-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #3b3b3b;
+  width: 100%;
+  height: 50px;
+  background-color: #333;
+  cursor: pointer;
+}
+#flights .flights__flights .flights-display .flight-item .flight-item-country {
+  width: 32px;
+  height: 32px;
+}
+#flights .flights__flights .flights-display .flight-item .flight-item-callsign {
+  padding-left: 15px;
+  color: white;
+  font-size: 16px;
+}
+#flights .flights__flights .flights-display .flight-item:hover,
+#flights .flights__flights .flights-display .flight-item:focus {
+  background-color: #454545;
 }
 .page {
   width: 100%;
@@ -104,6 +170,28 @@ a:hover {
 }
 .footer .wrapper {
   height: 40px;
+}
+.resize {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 30px;
+  height: 30px;
+  box-sizing: border-box;
+  padding: 5px;
+  z-index: 99;
+  border-radius: 50%;
+  background-color: #333;
+  border: 1px solid #565656;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  visibility: hidden;
+  cursor: pointer;
+}
+.resize.resize--expand .resize-text__collapse,
+.resize.resize--collapse .resize-text__expand {
+  display: none;
 }
 .header .header-title {
   color: white;
@@ -133,6 +221,23 @@ a:hover {
   vertical-align: middle;
   margin-left: 10px;
 }
+.grid-item {
+  position: relative;
+}
+.grid-item:hover .resize {
+  visibility: visible;
+}
+.grid-item.fullscreen {
+  position: absolute !important;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  grid-area: none !important;
+}
+.grid-item.hidden {
+  display: none !important;
+}
 .main {
   display: flex;
   justify-content: center;
@@ -150,17 +255,17 @@ a:hover {
   height: 100%;
   grid-template-columns: 1.2fr repeat(4, 1fr);
   grid-template-rows: repeat(4, 1fr);
-  grid-template-areas: "finfo map map map flights" "finfo map map map flights" "finfo map map map flights" "finfo total total c flights";
+  grid-template-areas: "finfo map map map flights" "finfo map map map flights" "finfo map map map flights" "finfo total total total flights";
   gap: 20px;
 }
 .main .main-wrapper > * {
   border-radius: 10px;
 }
-.main .main-wrapper .grid-item {
+.main .main-wrapper .grid-item:not(#map) {
   background-color: #333;
   border: 1px solid #565656;
 }
-.main .main-wrapper .grid-item .grid-item-header {
+.main .main-wrapper .grid-item:not(#map) .grid-item-header {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,7 +274,7 @@ a:hover {
   color: white;
   font-size: 20px;
 }
-.main .main-wrapper .grid-item .grid-item-body {
+.main .main-wrapper .grid-item:not(#map) .grid-item-body {
   height: calc(100% - 50px);
   color: white;
 }
@@ -179,6 +284,15 @@ a:hover {
 .footer .footer-dev span {
   margin-right: 5px;
   color: #6b6b6b;
+}
+.rs-school-logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 105px;
+}
+.inverted-color {
+  filter: invert(1);
 }
 @media (max-width: 1000px) {
   .main-wrapper {

@@ -12,7 +12,7 @@ export default class FlightInfoBlock extends UIBlock {
   private flightInfoTable: HTMLElement | null;
 
   constructor() {
-    super("flights");
+    super("flight-info");
 
     this.selectedFlight = null;
     this.selectedFlightIcao24 = '';
@@ -36,16 +36,16 @@ export default class FlightInfoBlock extends UIBlock {
     this.ConstructAndUpdateTableData(this.latestStatesData, this.selectedFlightIcao24);
   }
 
-  public SelectFlight(flightIcao24: string) {
+  public SelectFlight(flightIcao24: string): void {
     if(this.noFlightSelectedElement === null || this.flightInfoElement === null) return;
 
     this.selectedFlightIcao24 = flightIcao24;
     this.selectedFlight = this.latestStatesData.GetByIcao24(flightIcao24);
 
+    this.ConstructAndUpdateTableData(this.latestStatesData, flightIcao24);
+
     this.flightInfoElement.style.display = 'block';
     this.noFlightSelectedElement.style.display = 'none';
-
-    this.ConstructAndUpdateTableData(this.latestStatesData, flightIcao24);
   }
 
   public DeselectFlight(): void {
@@ -62,8 +62,8 @@ export default class FlightInfoBlock extends UIBlock {
     if(this.flightInfoTable === null) return;
 
     // we assume the state is not null here as this method is only called when the state exists.
-    let state = statesArray.GetByIcao24(flightIcao24) as State;
-    let stateKeyValueArray = state.ToKeyValueArrayForTable();
+    const state = statesArray.GetByIcao24(flightIcao24) as State;
+    const stateKeyValueArray = state.ToKeyValueArrayForTable();
     
     // remove table rows
     this.flightInfoTable.textContent = '';
@@ -74,9 +74,9 @@ export default class FlightInfoBlock extends UIBlock {
   }
 
   private ConstructTableRow(key: string, value: string): HTMLTableRowElement {
-    let row = document.createElement('tr');
-    let leftColumn = document.createElement('td');
-    let rightColumn = document.createElement('td');
+    const row = document.createElement('tr');
+    const leftColumn = document.createElement('td');
+    const rightColumn = document.createElement('td');
 
     leftColumn.classList.add("left-column");
     rightColumn.classList.add("right-column");

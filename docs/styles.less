@@ -21,6 +21,10 @@ body {
   width: 100%;
   height: 100%;
   min-height: 400px;
+
+  &:hover {
+    overflow: initial !important;
+  }
 }
 
 #flight-info {
@@ -73,8 +77,32 @@ body {
 }
 
 #total-info {
-  grid-area: total;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   min-height: 130px;
+  padding: 10px;
+  grid-area: total;
+
+  .total-info__block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90%;
+    width: 50%;
+    color: white;
+
+    .block-name {
+      font-size: 12px;
+      margin-bottom: 5px;
+      color: #8d8d8d;
+    }
+
+    .block-value {
+      font-size: 20px;
+    }
+  }
 }
 
 #flights {
@@ -89,6 +117,54 @@ body {
     padding: 0px 20px;
     color: #8d8d8d;
     text-align: center;
+  }
+
+  .flights__flights {
+    display: none;
+    height: 100%;
+
+    .flights-search {
+      width: 100%;
+      height: 45px;
+      padding: 10px;
+      border: none;
+      border-bottom: 1px solid #505050;
+      background-color: transparent;
+      color: white;
+      font-size: 16px;
+    }
+  
+    .flights-display {
+      width: 100%;
+      height: calc(100% - 45px);
+      overflow-y: auto;
+  
+      .flight-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #3b3b3b;
+        width: 100%;
+        height: 50px;
+        background-color: #333;
+        cursor: pointer;
+  
+        .flight-item-country {
+          width: 32px;
+          height: 32px;
+        }
+  
+        .flight-item-callsign {
+          padding-left: 15px;
+          color: white;
+          font-size: 16px;
+        }
+
+        &:hover, &:focus {
+          background-color: #454545;
+        }
+      }
+    }
   }
 }
 
@@ -121,6 +197,29 @@ a {
 
 .footer .wrapper {
   height: 40px;;
+}
+
+.resize {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 30px;
+  height: 30px;
+  box-sizing: border-box;
+  padding: 5px;
+  z-index: 99;
+  border-radius: 50%;
+  background-color: #333;
+  border: 1px solid #565656;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  visibility: hidden;
+  cursor: pointer;
+
+  &.resize--expand .resize-text__collapse, &.resize--collapse .resize-text__expand {
+    display: none;
+  }
 }
 
 .header {
@@ -157,6 +256,29 @@ a {
   }
 }
 
+.grid-item {
+  position: relative;
+
+  &:hover {
+    .resize {
+      visibility: visible;
+    }
+  }
+
+  &.fullscreen {
+    position: absolute !important;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    grid-area: none !important;
+  }
+
+  &.hidden {
+    display: none !important;
+  }
+}
+
 .main {
   display: flex;
   justify-content: center;
@@ -174,14 +296,14 @@ a {
     height: 100%;
     grid-template-columns: 1.2fr repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    grid-template-areas: "finfo map map map flights" "finfo map map map flights" "finfo map map map flights" "finfo total total c flights";
+    grid-template-areas: "finfo map map map flights" "finfo map map map flights" "finfo map map map flights" "finfo total total total flights";
     gap: 20px;
 
     & > * {
       border-radius: 10px;
     }
 
-    .grid-item {
+    .grid-item:not(#map) {
       background-color: #333;
       border: 1px solid #565656;
 
@@ -212,6 +334,17 @@ a {
       color: #6b6b6b;
     }
   }
+}
+
+.rs-school-logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 105px;
+}
+
+.inverted-color {
+  filter: invert(1);
 }
 
 @media(max-width: 1000px) {
